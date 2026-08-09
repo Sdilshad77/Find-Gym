@@ -22,7 +22,7 @@ export default function ProductCard({ product }) {
             src={image}
             alt={product.productName}
             onError={() => setImgError(true)}
-            className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+            className="block h-full w-full object-cover transition duration-300 group-hover:scale-105"
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-800 to-slate-900 text-5xl">

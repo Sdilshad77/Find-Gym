@@ -18,7 +18,7 @@ export default function GymCard({ gym }) {
             src={image}
             alt={gym.gymName}
             onError={() => setImgError(true)}
-            className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+            className="block h-full w-full object-cover transition duration-300 group-hover:scale-105"
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-800 to-slate-900 text-5xl">

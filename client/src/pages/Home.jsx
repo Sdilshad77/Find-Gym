@@ -166,7 +166,7 @@ export default function Home() {
                 src={dealImgError ? DEAL_FALLBACK_IMG : deal.images?.[0] || DEAL_FALLBACK_IMG}
                 alt={deal.productName}
                 onError={() => setDealImgError(true)}
-                className="h-56 w-full object-cover object-center transition-transform duration-700 group-hover:scale-105 sm:h-64"
+                className="block h-56 w-full object-cover object-center transition-transform duration-700 group-hover:scale-105 sm:h-64"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent" />
               <span className="chip absolute top-4 left-4 bg-slate-950/70 text-lime-300 ring-1 ring-lime-400/40 backdrop-blur">
