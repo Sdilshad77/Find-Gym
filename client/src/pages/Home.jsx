@@ -56,6 +56,23 @@ export default function Home() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [dealImgError, setDealImgError] = useState(false);
+  const [timeLeft, setTimeLeft] = useState({ h: "00", m: "00", s: "00" });
+
+  useEffect(() => {
+    const tick = () => {
+      const now = new Date();
+      const end = new Date(now);
+      end.setHours(24, 0, 0, 0);
+      const diff = Math.max(0, end - now);
+      const h = String(Math.floor(diff / 3.6e6)).padStart(2, "0");
+      const m = String(Math.floor((diff % 3.6e6) / 6e4)).padStart(2, "0");
+      const s = String(Math.floor((diff % 6e4) / 1e3)).padStart(2, "0");
+      setTimeLeft({ h, m, s });
+    };
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, []);
 
   useEffect(() => {
     Promise.all([
@@ -158,47 +175,96 @@ export default function Home() {
       </section>
 
       {/* ================= DEAL OF THE WEEK ================= */}
-      {deal && (
-        <section className="mx-auto max-w-7xl px-4 py-4">
-          <Link
-            to={`/products/${deal._id}`}
-            className="card card-hover grid overflow-hidden !bg-gradient-to-r !from-slate-900 !via-slate-900 !to-brand-900/40 sm:grid-cols-2"
-          >
-            <div className="group relative bg-slate-800">
-              <img
-                src={dealImgError ? DEAL_FALLBACK_IMG : deal.images?.[0] || DEAL_FALLBACK_IMG}
-                alt={deal.productName}
-                onError={() => setDealImgError(true)}
-                className="block h-56 w-full object-cover object-center transition-transform duration-700 group-hover:scale-105 sm:h-64"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent" />
-              <span className="chip absolute top-4 left-4 bg-slate-950/70 text-lime-300 ring-1 ring-lime-400/40 backdrop-blur">
-                ⭐ {deal.rating} · {deal.totalReviews} reviews
+      {deal && (() => {
+        const save = deal.price - deal.discountPrice;
+        const dealImg = dealImgError
+          ? DEAL_FALLBACK_IMG
+          : deal.images?.[0] || DEAL_FALLBACK_IMG;
+        return (
+          <section className="relative mx-auto max-w-7xl px-4 py-10">
+            <div className="absolute -top-10 left-1/2 h-40 w-96 -translate-x-1/2 rounded-full bg-brand-500/10 blur-[100px]" />
+
+            <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+              <h2 className="text-2xl font-extrabold sm:text-3xl">
+                🔥 <span className="text-brand-400">Deal</span> of the Week
+              </h2>
+              <span className="flex items-center gap-2 text-xs font-semibold text-slate-300">
+                <span className="chip bg-red-500/15 text-red-300 ring-1 ring-red-500/30">
+                  ⏰ Ends Tonight
+                </span>
+                <span className="flex gap-1 font-mono text-sm">
+                  {[timeLeft.h, timeLeft.m, timeLeft.s].map((v, i) => (
+                    <span
+                      key={i}
+                      className="rounded-lg bg-slate-900 px-2 py-1 tabular-nums ring-1 ring-brand-500/30"
+                    >
+                      {v}
+                    </span>
+                  ))}
+                </span>
               </span>
             </div>
-            <div className="flex flex-col justify-center p-6 sm:p-10">
-              <span className="chip w-fit bg-red-500/15 text-red-300 ring-1 ring-red-500/30">
-                🔥 Deal of the Week · {dealDiscount}% OFF
-              </span>
-              <h3 className="mt-3 text-2xl font-black sm:text-3xl">
-                {deal.productName}
-              </h3>
-              <p className="mt-2 text-sm text-slate-300">{deal.description}</p>
-              <div className="mt-4 flex items-baseline gap-3">
-                <span className="text-3xl font-black text-brand-400">
-                  {formatINR(deal.discountPrice)}
+
+            <Link
+              to={`/products/${deal._id}`}
+              className="card group relative grid overflow-hidden !border-brand-500/20 !bg-gradient-to-br !from-slate-900 !via-slate-900 !to-brand-900/40 sm:grid-cols-[1.05fr_1fr]"
+            >
+              <div className="relative min-h-[260px] overflow-hidden bg-slate-800 sm:min-h-[320px]">
+                <img
+                  src={dealImg}
+                  alt={deal.productName}
+                  onError={() => setDealImgError(true)}
+                  className="absolute inset-0 block h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/10 to-transparent" />
+                <span className="chip absolute top-4 left-4 bg-slate-950/70 text-lime-300 ring-1 ring-lime-400/40 backdrop-blur">
+                  ⭐ {deal.rating} · {deal.totalReviews} reviews
                 </span>
-                <span className="text-lg text-slate-400 line-through">
-                  {formatINR(deal.price)}
+                <span className="absolute bottom-4 left-4 grid h-16 w-16 rotate-[-8deg] place-items-center rounded-2xl bg-gradient-to-br from-red-500 to-red-600 text-center shadow-2xl shadow-red-500/40 transition-transform duration-500 group-hover:rotate-0">
+                  <span className="text-lg leading-none font-black text-white">
+                    {dealDiscount}%<span className="block text-[9px] font-bold tracking-wide">OFF</span>
+                  </span>
                 </span>
               </div>
-              <span className="mt-5 w-fit btn-primary !px-6 !py-2.5">
-                Grab the Deal →
-              </span>
-            </div>
-          </Link>
-        </section>
-      )}
+
+              <div className="relative flex flex-col justify-center p-6 sm:p-10">
+                <div className="pointer-events-none absolute -top-10 -right-10 h-40 w-40 rounded-full bg-brand-500/15 blur-3xl" />
+                <span className="chip w-fit bg-brand-500/15 text-brand-400 ring-1 ring-brand-500/30">
+                  🔥 Biggest Discount on GymHub
+                </span>
+                <h3 className="mt-3 text-2xl font-black sm:text-3xl">
+                  {deal.productName}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-400">
+                  {deal.description}
+                </p>
+
+                <div className="mt-4 flex items-baseline gap-3">
+                  <span className="text-4xl font-black text-brand-400">
+                    {formatINR(deal.discountPrice)}
+                  </span>
+                  <span className="text-lg text-slate-500 line-through">
+                    {formatINR(deal.price)}
+                  </span>
+                  <span className="rounded-full bg-emerald-500/15 px-2.5 py-1 text-xs font-bold text-emerald-400">
+                    Save {formatINR(save)}
+                  </span>
+                </div>
+
+                <div className="mt-5 flex flex-wrap gap-2">
+                  <span className="chip bg-slate-800 text-slate-300">🚚 Free Delivery</span>
+                  <span className="chip bg-slate-800 text-slate-300">↩️ 7-Day Returns</span>
+                  <span className="chip bg-slate-800 text-slate-300">✔️ Authentic Brand</span>
+                </div>
+
+                <span className="mt-6 w-fit btn-primary !px-7 !py-3 text-base shadow-xl shadow-brand-500/30">
+                  Grab the Deal →
+                </span>
+              </div>
+            </Link>
+          </section>
+        );
+      })()}
 
       {/* ================= WHY US ================= */}
       <section className="mx-auto max-w-7xl px-4 py-14">
