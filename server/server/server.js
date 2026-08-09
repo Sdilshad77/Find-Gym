@@ -16,8 +16,7 @@ import paymentRoutes from "./routes/paymentRoutes.js";
 import notificationRoutes from "./routes/notificationRoutes.js";
 import aiRoutes from "./routes/aiRoutes.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
-import dns from "dns";
-dns.setServers(["8.8.8.8"]);
+import errorMiddleware from "./middleware/errorMiddleware.js";
 
 dotenv.config();
 connectDB();
@@ -26,12 +25,18 @@ const app = express();
 
 app.use(express.json());
 
+const allowedOrigins = (process.env.CLIENT_URL || "")
+  .split(",")
+  .map((u) => u.trim())
+  .filter(Boolean);
+
 app.use(
   cors({
     origin: (origin, cb) => {
       if (
         !origin ||
-        /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)
+        /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin) ||
+        allowedOrigins.includes(origin)
       ) {
         return cb(null, true);
       }
@@ -61,6 +66,17 @@ app.use("/api/payments", paymentRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/ai", aiRoutes);
 app.use("/api/bookings", bookingRoutes);
+
+// API 404 - unknown routes
+app.use("/api", (req, res) => {
+  res.status(404).json({
+    success: false,
+    message: `API route not found: ${req.method} ${req.originalUrl}`,
+  });
+});
+
+app.use(errorMiddleware);
+
 const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, () => {
