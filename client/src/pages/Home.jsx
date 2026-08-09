@@ -9,6 +9,9 @@ import { formatINR } from "../utils/format.js";
 const HERO_IMG =
   "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?auto=format&fit=crop&w=1920&q=80";
 
+const DEAL_FALLBACK_IMG =
+  "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1200&q=80";
+
 const CATEGORIES = [
   { name: "Protein", emoji: "🥛" },
   { name: "Creatine", emoji: "⚡" },
@@ -52,6 +55,7 @@ export default function Home() {
   const [gyms, setGyms] = useState([]);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [dealImgError, setDealImgError] = useState(false);
 
   useEffect(() => {
     Promise.all([
@@ -157,12 +161,17 @@ export default function Home() {
             to={`/products/${deal._id}`}
             className="card card-hover grid overflow-hidden !bg-gradient-to-r !from-slate-900 !via-slate-900 !to-brand-900/40 sm:grid-cols-2"
           >
-            <div className="bg-slate-800">
+            <div className="group relative bg-slate-800">
               <img
-                src={deal.images?.[0] || ""}
+                src={dealImgError ? DEAL_FALLBACK_IMG : deal.images?.[0] || DEAL_FALLBACK_IMG}
                 alt={deal.productName}
-                className="h-56 w-full object-cover sm:h-64"
+                onError={() => setDealImgError(true)}
+                className="h-56 w-full object-cover object-center transition-transform duration-700 group-hover:scale-105 sm:h-64"
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent" />
+              <span className="chip absolute top-4 left-4 bg-slate-950/70 text-lime-300 ring-1 ring-lime-400/40 backdrop-blur">
+                ⭐ {deal.rating} · {deal.totalReviews} reviews
+              </span>
             </div>
             <div className="flex flex-col justify-center p-6 sm:p-10">
               <span className="chip w-fit bg-red-500/15 text-red-300 ring-1 ring-red-500/30">

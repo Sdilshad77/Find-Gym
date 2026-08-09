@@ -29,23 +29,6 @@ const GYM_IMAGES = [
   "photo-1521805103424-d8f8430e8933",
 ];
 
-const SUP_IMAGES = [
-  "photo-1548690312-e3b507d8c110",
-  "photo-1553729459-efe14ef6055d",
-  "photo-1579758629938-03607ccdbaba",
-  "photo-1556906781-9a412961c28c",
-  "photo-1579722820308-d74e571900a9",
-  "photo-1593095948071-474c5cc2989d",
-  "photo-1605296867304-46d5465a13f1",
-  "photo-1502657877623-f66bf489d236",
-  "photo-1518611012118-696072aa579a",
-  "photo-1571019613454-1cb2f99b2d8b",
-  "photo-1517836357463-d25dfeac3438",
-  "photo-1526506118085-60ce8714f8c5",
-  "photo-1584735935682-2f2b69dff9d2",
-  "photo-1599058917212-d750089bc07e",
-];
-
 const SEED_OWNER = {
   name: "GymHub Demo Owner",
   email: "owner@gymhub.com",
@@ -215,18 +198,66 @@ const GYMS = [
 ];
 
 const PRODUCTS = [
-  { name: "Gold Standard 100% Whey 1kg", cat: "Protein", brand: "Optimum Nutrition", price: 4999, disc: 4299, stock: 30, rating: 4.8, rev: 512, imgIdx: [0, 1] },
-  { name: "MuscleBlaze Whey Protein 1kg", cat: "Protein", brand: "MuscleBlaze", price: 2799, disc: 2349, stock: 55, rating: 4.7, rev: 890, imgIdx: [2, 3] },
-  { name: "Ultra Pure Creatine 300g", cat: "Creatine", brand: "NutriWorks", price: 1299, disc: 899, stock: 80, rating: 4.6, rev: 743, imgIdx: [4, 5] },
-  { name: "Nitro Pre-Workout 30serv", cat: "Pre Workout", brand: "RYSE Supplements", price: 1999, disc: 1599, stock: 40, rating: 4.5, rev: 289, imgIdx: [6, 7] },
-  { name: "BCAA 2:1:1 Recovery 250g", cat: "BCAA", brand: "MuscleTech", price: 1599, disc: 1299, stock: 35, rating: 4.4, rev: 198, imgIdx: [8, 9] },
-  { name: "Mass Gainer 3kg", cat: "Mass Gainer", brand: "MuscleBlaze", price: 3499, disc: 2999, stock: 25, rating: 4.3, rev: 342, imgIdx: [10, 11] },
-  { name: "Gym Gloves Pro Grip", cat: "Accessories", brand: "Rage", price: 999, disc: 699, stock: 90, rating: 4.6, rev: 210, imgIdx: [12, 13] },
-  { name: "Lifting Straps & Belt Combo", cat: "Accessories", brand: "Body Beast", price: 1499, disc: 1099, stock: 60, rating: 4.5, rev: 145, imgIdx: [0, 2] },
-  { name: "Resistance Bands Set (5pcs)", cat: "Accessories", brand: "Toros", price: 799, disc: 499, stock: 120, rating: 4.7, rev: 620, imgIdx: [5, 6] },
-  { name: "Shaker Bottle 700ml Pro", cat: "Accessories", brand: "GymHub", price: 499, disc: 349, stock: 150, rating: 4.4, rev: 180, imgIdx: [3, 8] },
-  { name: "ThermoX Fat Burner 60caps", cat: "Others", brand: "NovaLabs", price: 1899, disc: 1499, stock: 45, rating: 4.2, rev: 96, imgIdx: [9, 4] },
-  { name: "Amino Energy 30 serves", cat: "BCAA", brand: "Cellucor", price: 1699, disc: 1399, stock: 30, rating: 4.4, rev: 112, imgIdx: [7, 1] },
+  {
+    name: "Gold Standard 100% Whey 1kg",
+    cat: "Protein", brand: "Optimum Nutrition", price: 4999, disc: 4299, stock: 30, rating: 4.8, rev: 512,
+    imgs: ["photo-1593095948071-474c5cc2989d", "photo-1579722820308-d74e571900a9"],
+  },
+  {
+    name: "MuscleBlaze Whey Protein 1kg",
+    cat: "Protein", brand: "MuscleBlaze", price: 2799, disc: 2349, stock: 55, rating: 4.7, rev: 890,
+    imgs: ["photo-1548690312-e3b507d8c110", "photo-1553729459-efe14ef6055d"],
+  },
+  {
+    name: "Ultra Pure Creatine 300g",
+    cat: "Creatine", brand: "NutriWorks", price: 1299, disc: 899, stock: 80, rating: 4.6, rev: 743,
+    imgs: ["photo-1579722820308-d74e571900a9", "photo-1553729459-efe14ef6055d"],
+  },
+  {
+    name: "Nitro Pre-Workout 30serv",
+    cat: "Pre Workout", brand: "RYSE Supplements", price: 1999, disc: 1599, stock: 40, rating: 4.5, rev: 289,
+    imgs: ["photo-1583454110551-21f2fa2afe61", "photo-1550345332-09e3ac987658"],
+  },
+  {
+    name: "BCAA 2:1:1 Recovery 250g",
+    cat: "BCAA", brand: "MuscleTech", price: 1599, disc: 1299, stock: 35, rating: 4.4, rev: 198,
+    imgs: ["photo-1553729459-efe14ef6055d", "photo-1548690312-e3b507d8c110"],
+  },
+  {
+    name: "Mass Gainer 3kg",
+    cat: "Mass Gainer", brand: "MuscleBlaze", price: 3499, disc: 2999, stock: 25, rating: 4.3, rev: 342,
+    imgs: ["photo-1571902943202-507ec2618e8f", "photo-1548690312-e3b507d8c110"],
+  },
+  {
+    name: "Gym Gloves Pro Grip",
+    cat: "Accessories", brand: "Rage", price: 999, disc: 699, stock: 90, rating: 4.6, rev: 210,
+    imgs: ["photo-1517836357463-d25dfeac3438", "photo-1507398941214-572c25f4b1dc"],
+  },
+  {
+    name: "Lifting Straps & Belt Combo",
+    cat: "Accessories", brand: "Body Beast", price: 1499, disc: 1099, stock: 60, rating: 4.5, rev: 145,
+    imgs: ["photo-1526506118085-60ce8714f8c5", "photo-1517836357463-d25dfeac3438"],
+  },
+  {
+    name: "Resistance Bands Set (5pcs)",
+    cat: "Accessories", brand: "Toros", price: 799, disc: 499, stock: 120, rating: 4.7, rev: 620,
+    imgs: ["photo-1517836357463-d25dfeac3438", "photo-1540497077202-7c8a3999166f"],
+  },
+  {
+    name: "Shaker Bottle 700ml Pro",
+    cat: "Accessories", brand: "GymHub", price: 499, disc: 349, stock: 150, rating: 4.4, rev: 180,
+    imgs: ["photo-1571019613454-1cb2f99b2d8b", "photo-1550345332-09e3ac987658"],
+  },
+  {
+    name: "ThermoX Fat Burner 60caps",
+    cat: "Others", brand: "NovaLabs", price: 1899, disc: 1499, stock: 45, rating: 4.2, rev: 96,
+    imgs: ["photo-1553729459-efe14ef6055d", "photo-1579722820308-d74e571900a9"],
+  },
+  {
+    name: "Amino Energy 30 serves",
+    cat: "BCAA", brand: "Cellucor", price: 1699, disc: 1399, stock: 30, rating: 4.4, rev: 112,
+    imgs: ["photo-1571019613454-1cb2f99b2d8b", "photo-1553729459-efe14ef6055d"],
+  },
 ];
 
 const seed = async () => {
@@ -287,7 +318,7 @@ const seed = async () => {
       const p = PRODUCTS[i];
       if (existingProductNames.includes(p.name)) continue;
 
-      const images = p.imgIdx.map((j) => u(SUP_IMAGES[j % SUP_IMAGES.length]));
+      const images = p.imgs.map((id) => u(id));
       const gym = allGyms[i % allGyms.length];
 
       await Product.create({
