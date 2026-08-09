@@ -7,7 +7,7 @@ import LoadingSpinner from "../components/LoadingSpinner.jsx";
 import { formatINR } from "../utils/format.js";
 
 const HERO_IMG =
-  "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1920&q=80";
+  "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?auto=format&fit=crop&w=1920&q=80";
 
 const CATEGORIES = [
   { name: "Protein", emoji: "🥛" },
@@ -82,9 +82,9 @@ export default function Home() {
         <img
           src={HERO_IMG}
           alt="Gym training"
-          className="absolute inset-0 h-full w-full object-cover"
+          className="absolute inset-0 h-full w-full object-cover object-center"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/85 via-slate-950/70 to-slate-950" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-slate-950/40" />
         <div className="absolute -top-32 left-1/4 h-96 w-96 rounded-full bg-brand-500/20 blur-[120px]" />
         <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-brand-500/50 to-transparent" />
 
