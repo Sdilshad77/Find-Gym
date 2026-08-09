@@ -25,24 +25,32 @@ const app = express();
 
 app.use(express.json());
 
-const allowedOrigins = (process.env.CLIENT_URL || "")
-  .split(",")
-  .map((u) => u.trim())
-  .filter(Boolean);
+const defaultAllowedOrigins = ["https://find-gym-theta.vercel.app"];
+
+const allowedOrigins = [
+  ...defaultAllowedOrigins,
+  ...(process.env.CLIENT_URL || "")
+    .split(",")
+    .map((u) => u.trim().replace(/\/+$/, ""))
+    .filter(Boolean),
+];
+
+const normalizeOrigin = (o) => (o || "").replace(/\/+$/, "");
 
 app.use(
   cors({
     origin: (origin, cb) => {
-      if (
-        !origin ||
+      if (!origin) return cb(null, true);
+      const ok =
         /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin) ||
-        allowedOrigins.includes(origin)
-      ) {
-        return cb(null, true);
-      }
-      return cb(null, false);
+        allowedOrigins.includes(normalizeOrigin(origin));
+      return cb(null, ok);
     },
     credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    optionsSuccessStatus: 204,
+    maxAge: 86400,
   })
 );
 
