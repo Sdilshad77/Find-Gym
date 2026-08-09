@@ -118,23 +118,26 @@ export default function Home() {
               Explore Gyms →
             </Link>
           </div>
+        </div>
+      </section>
 
-          <div className="mt-12 grid w-full max-w-2xl grid-cols-2 gap-4 sm:grid-cols-4">
-            {[
-              { value: "500+", label: "Gyms Listed" },
-              { value: "50+", label: "Cities" },
-              { value: "25K+", label: "Happy Members" },
-              { value: "4.8★", label: "Avg. Rating" },
-            ].map((s) => (
-              <div
-                key={s.label}
-                className="rounded-2xl border border-white/10 bg-slate-900/60 px-4 py-4 backdrop-blur"
-              >
-                <p className="text-2xl font-black text-brand-400">{s.value}</p>
-                <p className="mt-0.5 text-xs text-slate-300">{s.label}</p>
-              </div>
-            ))}
-          </div>
+      {/* ================= STATS STRIP ================= */}
+      <section className="snap-y mx-auto max-w-7xl px-4 pb-1">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {[
+            { value: "500+", label: "Gyms Listed" },
+            { value: "50+", label: "Cities" },
+            { value: "25K+", label: "Happy Members" },
+            { value: "4.8★", label: "Avg. Rating" },
+          ].map((s) => (
+            <div
+              key={s.label}
+              className="rounded-2xl bg-slate-900 ring-1 ring-white/10 px-4 py-4 text-center"
+            >
+              <p className="text-2xl font-black text-brand-400">{s.value}</p>
+              <p className="mt-0.5 text-xs font-medium text-slate-300">{s.label}</p>
+            </div>
+          ))}
         </div>
       </section>
 
