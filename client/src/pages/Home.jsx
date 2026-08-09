@@ -4,6 +4,19 @@ import api from "../api/axios.js";
 import GymCard from "../components/GymCard.jsx";
 import ProductCard from "../components/ProductCard.jsx";
 import LoadingSpinner from "../components/LoadingSpinner.jsx";
+import { formatINR } from "../utils/format.js";
+
+const HERO_IMG =
+  "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1920&q=80";
+
+const CATEGORIES = [
+  { name: "Protein", emoji: "🥛" },
+  { name: "Creatine", emoji: "⚡" },
+  { name: "Pre Workout", emoji: "🔥" },
+  { name: "BCAA", emoji: "💊" },
+  { name: "Mass Gainer", emoji: "🍚" },
+  { name: "Accessories", emoji: "🧤" },
+];
 
 const FEATURES = [
   {
@@ -28,13 +41,6 @@ const FEATURES = [
   },
 ];
 
-const STATS = [
-  { value: "500+", label: "Gyms Listed" },
-  { value: "50+", label: "Cities" },
-  { value: "25K+", label: "Happy Members" },
-  { value: "4.8★", label: "Avg. Rating" },
-];
-
 const PLAN_PERKS = [
   { icon: "⚡", text: "Instant activation after payment" },
   { icon: "💸", text: "Up to 15% off on yearly plans" },
@@ -50,7 +56,7 @@ export default function Home() {
   useEffect(() => {
     Promise.all([
       api.get("/gyms?limit=6"),
-      api.get("/products", { params: { limit: 6, sort: "rating" } }),
+      api.get("/products", { params: { limit: 12, sort: "rating" } }),
     ])
       .then(([g, p]) => {
         setGyms(g.data.gyms || []);
@@ -60,26 +66,39 @@ export default function Home() {
       .finally(() => setLoading(false));
   }, []);
 
+  const deal = [...products].sort(
+    (a, b) =>
+      (a.price - a.discountPrice) / a.price -
+      (b.price - b.discountPrice) / b.price
+  )[0];
+  const dealDiscount = deal
+    ? Math.round(((deal.price - deal.discountPrice) / deal.price) * 100)
+    : 0;
+
   return (
     <div>
-      {/* ================= HERO ================= */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-950 to-slate-950" />
-        <div className="absolute -top-40 left-1/4 h-[28rem] w-[28rem] rounded-full bg-brand-500/15 blur-[120px]" />
-        <div className="absolute top-10 right-1/4 h-72 w-72 rounded-full bg-sky-500/10 blur-[100px]" />
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-brand-500/40 to-transparent" />
+      {/* ================= HERO (image bg) ================= */}
+      <section className="relative min-h-[560px] overflow-hidden">
+        <img
+          src={HERO_IMG}
+          alt="Gym training"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/85 via-slate-950/70 to-slate-950" />
+        <div className="absolute -top-32 left-1/4 h-96 w-96 rounded-full bg-brand-500/20 blur-[120px]" />
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-brand-500/50 to-transparent" />
 
-        <div className="relative mx-auto max-w-7xl px-4 pt-20 pb-16 text-center sm:pt-28">
-          <span className="chip mb-6 bg-brand-500/15 text-brand-400 ring-1 ring-brand-500/30">
+        <div className="relative mx-auto flex min-h-[560px] max-w-7xl flex-col items-center justify-center px-4 py-20 text-center">
+          <span className="chip mb-6 bg-brand-500/15 text-brand-400 ring-1 ring-brand-500/30 backdrop-blur">
             🚀 India ka #1 Gym Discovery Platform
           </span>
-          <h1 className="mx-auto max-w-3xl text-4xl font-black leading-tight tracking-tight sm:text-6xl">
+          <h1 className="mx-auto max-w-3xl text-4xl font-black leading-tight tracking-tight drop-shadow-lg sm:text-6xl">
             Train Smarter.{" "}
             <span className="bg-gradient-to-r from-brand-300 via-brand-400 to-lime-300 bg-clip-text text-transparent">
               Live Stronger.
             </span>
           </h1>
-          <p className="mx-auto mt-5 max-w-xl text-lg text-slate-400">
+          <p className="mx-auto mt-5 max-w-xl text-lg text-slate-200">
             Discover verified gyms, grab flexible membership plans, book free
             trials & shop supplements — all in one place.
           </p>
@@ -88,24 +107,89 @@ export default function Home() {
             <Link to="/plans" className="btn-primary !px-8 !py-4 text-base">
               🎫 Get Membership Plans
             </Link>
-            <Link to="/gyms" className="btn-outline !px-8 !py-4 text-base">
+            <Link
+              to="/gyms"
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/10 px-8 py-4 text-base font-semibold text-white backdrop-blur transition hover:bg-white/20"
+            >
               Explore Gyms →
             </Link>
           </div>
 
-          <div className="mx-auto mt-12 grid max-w-2xl grid-cols-2 gap-4 sm:grid-cols-4">
-            {STATS.map((s) => (
-              <div key={s.label} className="card px-4 py-4">
+          <div className="mt-12 grid w-full max-w-2xl grid-cols-2 gap-4 sm:grid-cols-4">
+            {[
+              { value: "500+", label: "Gyms Listed" },
+              { value: "50+", label: "Cities" },
+              { value: "25K+", label: "Happy Members" },
+              { value: "4.8★", label: "Avg. Rating" },
+            ].map((s) => (
+              <div
+                key={s.label}
+                className="rounded-2xl border border-white/10 bg-slate-900/60 px-4 py-4 backdrop-blur"
+              >
                 <p className="text-2xl font-black text-brand-400">{s.value}</p>
-                <p className="mt-0.5 text-xs text-slate-400">{s.label}</p>
+                <p className="mt-0.5 text-xs text-slate-300">{s.label}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
+      {/* ================= CATEGORY CHIPS ================= */}
+      <section className="mx-auto max-w-7xl px-4 py-10">
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          {CATEGORIES.map((c) => (
+            <Link
+              key={c.name}
+              to={`/shop?category=${c.name}`}
+              className="card card-hover flex items-center gap-2 !rounded-full px-5 py-2.5 text-sm font-semibold"
+            >
+              <span>{c.emoji}</span>
+              {c.name}
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* ================= DEAL OF THE WEEK ================= */}
+      {deal && (
+        <section className="mx-auto max-w-7xl px-4 py-4">
+          <Link
+            to={`/products/${deal._id}`}
+            className="card card-hover grid overflow-hidden !bg-gradient-to-r !from-slate-900 !via-slate-900 !to-brand-900/40 sm:grid-cols-2"
+          >
+            <div className="bg-slate-800">
+              <img
+                src={deal.images?.[0] || ""}
+                alt={deal.productName}
+                className="h-56 w-full object-cover sm:h-64"
+              />
+            </div>
+            <div className="flex flex-col justify-center p-6 sm:p-10">
+              <span className="chip w-fit bg-red-500/15 text-red-300 ring-1 ring-red-500/30">
+                🔥 Deal of the Week · {dealDiscount}% OFF
+              </span>
+              <h3 className="mt-3 text-2xl font-black sm:text-3xl">
+                {deal.productName}
+              </h3>
+              <p className="mt-2 text-sm text-slate-300">{deal.description}</p>
+              <div className="mt-4 flex items-baseline gap-3">
+                <span className="text-3xl font-black text-brand-400">
+                  {formatINR(deal.discountPrice)}
+                </span>
+                <span className="text-lg text-slate-400 line-through">
+                  {formatINR(deal.price)}
+                </span>
+              </div>
+              <span className="mt-5 w-fit btn-primary !px-6 !py-2.5">
+                Grab the Deal →
+              </span>
+            </div>
+          </Link>
+        </section>
+      )}
+
       {/* ================= WHY US ================= */}
-      <section className="mx-auto max-w-7xl px-4 py-16">
+      <section className="mx-auto max-w-7xl px-4 py-14">
         <div className="mb-8 text-center">
           <span className="chip mb-3 bg-brand-500/15 text-brand-400">
             Why GymHub
@@ -219,8 +303,8 @@ export default function Home() {
         {products.length === 0 ? (
           <p className="text-slate-500">No products yet.</p>
         ) : (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {products.map((p) => (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {products.slice(0, 12).map((p) => (
               <ProductCard key={p._id} product={p} />
             ))}
           </div>

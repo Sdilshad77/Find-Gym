@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import { formatINR, img } from "../utils/format.js";
 import RatingStars from "./RatingStars.jsx";
 
 export default function ProductCard({ product }) {
   const image = img(product.images);
+  const [imgError, setImgError] = useState(false);
   const discount =
     product.price > product.discountPrice
       ? Math.round(((product.price - product.discountPrice) / product.price) * 100)
@@ -15,10 +17,11 @@ export default function ProductCard({ product }) {
       className="card group overflow-hidden transition hover:border-slate-600 hover:shadow-xl hover:shadow-brand-500/5"
     >
       <div className="relative h-44 w-full overflow-hidden bg-slate-800">
-        {image ? (
+        {image && !imgError ? (
           <img
             src={image}
             alt={product.productName}
+            onError={() => setImgError(true)}
             className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
           />
         ) : (

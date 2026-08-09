@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import RatingStars from "./RatingStars.jsx";
 import { formatINR, img } from "../utils/format.js";
 
 export default function GymCard({ gym }) {
   const image = img(gym.images);
+  const [imgError, setImgError] = useState(false);
 
   return (
     <Link
@@ -11,10 +13,11 @@ export default function GymCard({ gym }) {
       className="card group overflow-hidden transition hover:border-slate-600 hover:shadow-xl hover:shadow-brand-500/5"
     >
       <div className="relative h-48 w-full overflow-hidden bg-slate-800">
-        {image ? (
+        {image && !imgError ? (
           <img
             src={image}
             alt={gym.gymName}
+            onError={() => setImgError(true)}
             className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
           />
         ) : (
