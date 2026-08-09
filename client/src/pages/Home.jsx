@@ -122,8 +122,8 @@ export default function Home() {
       </section>
 
       {/* ================= STATS STRIP ================= */}
-      <section className="snap-y mx-auto max-w-7xl px-4 pb-1">
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <section className="mx-auto max-w-7xl px-4 py-6">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-4">
           {[
             { value: "500+", label: "Gyms Listed" },
             { value: "50+", label: "Cities" },
@@ -227,12 +227,12 @@ export default function Home() {
 
       {/* ================= PLANS PROMO ================= */}
       <section className="mx-auto max-w-7xl px-4 py-8">
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-600 via-brand-500 to-lime-400 p-8 sm:p-12">
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-500 via-brand-400 to-lime-300 p-8 sm:p-12">
           <div className="absolute -top-16 -right-16 h-56 w-56 rounded-full bg-white/15 blur-2xl" />
           <div className="absolute -bottom-20 -left-10 h-64 w-64 rounded-full bg-slate-950/20 blur-2xl" />
           <div className="relative grid items-center gap-8 lg:grid-cols-2">
             <div>
-              <span className="chip bg-slate-950/25 text-white">
+              <span className="chip bg-slate-950/80 text-lime-300">
                 🎫 Membership Plans
               </span>
               <h2 className="mt-4 text-3xl font-black text-slate-950 sm:text-4xl">
@@ -270,58 +270,60 @@ export default function Home() {
           <LoadingSpinner size="lg" />
         </div>
       ) : (
-        <div className="mx-auto max-w-7xl px-4 py-14">
-          <div className="mb-6 flex items-end justify-between">
-            <div>
-              <h2 className="text-2xl font-extrabold">Featured Gyms</h2>
-              <p className="text-sm text-slate-400">
-                Top-rated gyms near you — view their plans
-              </p>
+        <>
+          <div className="mx-auto max-w-7xl px-4 py-14">
+            <div className="mb-6 flex items-end justify-between">
+              <div>
+                <h2 className="text-2xl font-extrabold">Featured Gyms</h2>
+                <p className="text-sm text-slate-400">
+                  Top-rated gyms near you — view their plans
+                </p>
+              </div>
+              <Link
+                to="/gyms"
+                className="text-sm font-semibold text-brand-400 hover:text-brand-300"
+              >
+                View all →
+              </Link>
             </div>
-            <Link
-              to="/gyms"
-              className="text-sm font-semibold text-brand-400 hover:text-brand-300"
-            >
-              View all →
-            </Link>
+            {gyms.length === 0 ? (
+              <p className="text-slate-500">No gyms yet. Be the first to add one!</p>
+            ) : (
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {gyms.map((g) => (
+                  <GymCard key={g._id} gym={g} />
+                ))}
+              </div>
+            )}
           </div>
-          {gyms.length === 0 ? (
-            <p className="text-slate-500">No gyms yet. Be the first to add one!</p>
-          ) : (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {gyms.map((g) => (
-                <GymCard key={g._id} gym={g} />
-              ))}
-            </div>
-          )}
-        </div>
-      )}
 
-      <div className="mx-auto max-w-7xl px-4 py-14">
-        <div className="mb-6 flex items-end justify-between">
-          <div>
-            <h2 className="text-2xl font-extrabold">Top Supplements</h2>
-            <p className="text-sm text-slate-400">
-              Bestselling nutrition &amp; gear
-            </p>
+          <div className="mx-auto max-w-7xl px-4 py-14">
+            <div className="mb-6 flex items-end justify-between">
+              <div>
+                <h2 className="text-2xl font-extrabold">Top Supplements</h2>
+                <p className="text-sm text-slate-400">
+                  Bestselling nutrition &amp; gear
+                </p>
+              </div>
+              <Link
+                to="/shop"
+                className="text-sm font-semibold text-brand-400 hover:text-brand-300"
+              >
+                Shop all →
+              </Link>
+            </div>
+            {products.length === 0 ? (
+              <p className="text-slate-500">No products yet.</p>
+            ) : (
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                {products.slice(0, 12).map((p) => (
+                  <ProductCard key={p._id} product={p} />
+                ))}
+              </div>
+            )}
           </div>
-          <Link
-            to="/shop"
-            className="text-sm font-semibold text-brand-400 hover:text-brand-300"
-          >
-            Shop all →
-          </Link>
-        </div>
-        {products.length === 0 ? (
-          <p className="text-slate-500">No products yet.</p>
-        ) : (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {products.slice(0, 12).map((p) => (
-              <ProductCard key={p._id} product={p} />
-            ))}
-          </div>
-        )}
-      </div>
+        </>
+      )}
 
       {/* ================= OWNER CTA ================= */}
       <div className="mx-auto max-w-7xl px-4 pb-20">
